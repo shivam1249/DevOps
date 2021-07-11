@@ -4,9 +4,9 @@
 
 #user were created to access AWS 
 provider "aws" {
-    region = "ap-south-1b"
-    access_key = "abcd"
-    secret_key = "abcd"
+    region = "ap-south-1"
+    access_key = "AKIA6N2TJWTZYT5HFQPD"
+    secret_key = "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"
 }
 
 
@@ -20,43 +20,6 @@ resource "aws_internet_gateway" "IGW-devops" {
     vpc_id = aws_vpc.devops.id
   
 }
-
-#create route table
-
-resource "aws_route_table" "route-devops" {
-  vpc_id = aws_vpc.devops.id
-
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.IGW-devops.id
-  }
-}
-
-#create subnet
-
-
-resource "aws_subnet" "devops3" {
-    vpc_id = aws_vpc.devops.id
-    cidr_block = "10.0.0.0/24"
-    
-
-    tags = {
-      name = "devops"
-
-    }
-}
-
-
-#route table association
-resource "aws_route_table_association" "web" {
-    subnet_id = aws_subnet.devops3.id
-    route_table_id = aws_route_table.route-devops.id
-
-  
-}
-
-
-
 
 #create security group
 
@@ -108,13 +71,7 @@ resource "aws_security_group" "allow_web" {
 
 #create network
 
-resource "aws_network_interface" "devops2" {
-  subnet_id       = aws_subnet.devops3.id
-  #private_ips     = ["10.0.0.50"]
-  security_groups = [aws_security_group.allow_web.id]
 
-  
-}
 
 
 #create Ec2
@@ -124,11 +81,7 @@ resource "aws_instance" "devops" {
     ami = "ami-0c1a7f89451184c8b"
     instance_type = "t2.micro"
     key_name = "main-key"
-    network_interface {
-      device_index = 0
-      network_interface_id = aws_network_interface.devops2.id
-
-    }
+   
 
 }
 
