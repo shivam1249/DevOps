@@ -5,8 +5,8 @@
 #user were created to access AWS 
 provider "aws" {
     region = "ap-south-1"
-    access_key = "AKIA6N2TJWTZYT5HFQPD"
-    secret_key = "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"
+    access_key = ""
+    secret_key = ""
 }
 
 
