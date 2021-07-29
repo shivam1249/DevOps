@@ -1,0 +1,32 @@
+- name: change_instance_type
+  hosts: localhost
+  become: false
+  connection: local
+  vars:
+    - instance_ids :
+    - resize_instance_to :
+
+  tasks:
+   - name: stop_ec2
+     ec2:
+        
+        
+        instance_ids:
+            - "{{ instance_ids }}"
+        region: ap-south-1
+        state: stopped
+        wait: yes
+   - name: "Resize EC2 instance."
+     shell: >
+         aws ec2 modify-instance-attribute --instance-id "{{ instance_ids }}"
+         --instance-type "{{ resize_instance_to }}" --region ap-south-1
+     register: resize_result
+   - name: Start EC2 instance.
+     ec2:
+        
+        
+        region: ap-south-1
+        instance_ids:
+            - "{{ instance_ids }}"
+        state: running
+        wait: yes
